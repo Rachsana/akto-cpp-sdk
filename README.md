@@ -17,6 +17,38 @@ existing SDKs — see [Schema compatibility](#schema-compatibility) below.
 > [Testing notes](#testing-notes)), and included a `docker-compose.yml` so
 > you can verify actual message delivery end-to-end.
 
+
+## Demo screenshots
+
+**Repo on GitHub**
+![GitHub repo](screenshots/01-github-repo.png)
+
+**Clean build from scratch**
+![Build success](screenshots/02-build-success.png)
+
+**Console sink — capture correctness**
+Every request/response is captured accurately (path, method, headers, body, status).
+![Console capture](screenshots/03-console-capture.png)
+
+**Error path handling**
+A 404 gets logged correctly too, not just successful requests.
+![Error handling](screenshots/04-error-handling.png)
+
+**Non-blocking under a dead Kafka broker**
+Response time stays sub-millisecond even when the configured broker is unreachable.
+![Non-blocking](screenshots/05-nonblocking-kafka-down.png)
+
+**Real end-to-end Kafka delivery**
+The captured record actually lands on the Kafka topic, verified with a real consumer.
+![Kafka delivery](screenshots/06-real-kafka-delivery.png)
+
+**Single-header plug-and-play**
+Compiled and run as a standalone 3-file project with a bare `g++` command — no CMake, no access to the rest of the repo.
+![Single header](screenshots/07-single-header-plugandplay.png)
+
+**Cleanup**
+![Cleanup](screenshots/08-cleanup.png)
+
 ## Architecture
 
 ```
