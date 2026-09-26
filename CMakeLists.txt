@@ -64,6 +64,7 @@ endif()
 # Install rules (for `make install` / packaging into other projects)
 # ---------------------------------------------------------------------------
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 install(TARGETS akto_sdk
   EXPORT akto_sdk-targets
@@ -78,3 +79,40 @@ install(EXPORT akto_sdk-targets
   NAMESPACE akto::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/akto_sdk
 )
+
+# Generates akto_sdkConfig.cmake + a version file, so that after
+# `make install`, any downstream project can simply do:
+#   find_package(akto_sdk REQUIRED)
+#   target_link_libraries(your_app PRIVATE akto::akto_sdk)
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/akto_sdkConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/akto_sdkConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/akto_sdk
+)
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/akto_sdkConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/akto_sdkConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/akto_sdkConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/akto_sdk
+)
+
+# ---------------------------------------------------------------------------
+# CPack: `cpack` in the build dir produces a distributable .tar.gz and, on
+# Debian/Ubuntu, a .deb -- a second, ready-made packaging path alongside the
+# single-header drop-in (see single_header/) for teams that prefer installing
+# a versioned artifact over vendoring a header.
+# ---------------------------------------------------------------------------
+set(CPACK_PACKAGE_NAME "akto-cpp-sdk")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_CONTACT "shivansh@akto.io")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Akto traffic-processing SDK for C++")
+set(CPACK_GENERATOR "TGZ;DEB")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "librdkafka++1, nlohmann-json3-dev")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "shivansh@akto.io")
+include(CPack)

@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Threads)
+
+# nlohmann_json may be found as a CMake package on some distros, or only
+# provide headers on others (e.g. plain `apt install nlohmann-json3-dev`).
+# Only require the dependency lookup when the exported target actually
+# needs it as a separate target (see CMakeLists.txt).
+find_package(nlohmann_json 3.2.0 QUIET)
+
+include("${CMAKE_CURRENT_LIST_DIR}/akto_sdk-targets.cmake")
+
+check_required_components(akto_sdk)
