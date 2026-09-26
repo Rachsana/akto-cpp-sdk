@@ -18,6 +18,10 @@ existing SDKs — see [Schema compatibility](#schema-compatibility) below.
 > you can verify actual message delivery end-to-end.
 
 
+## Demo Video
+[Watch the demo](https://drive.google.com/file/d/1vyFFjF_9dCOrvN-5dzBOzURem6hMhKsU/view?usp=sharing)
+
+
 ## Demo screenshots
 
 **Repo on GitHub**
